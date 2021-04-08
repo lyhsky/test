@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lyh.crm.workbench.dao.CustomerDao">
+
+    <select id="detail" resultType="Customer">
+
+        select
+
+        cus.id,
+        u.name as owner,
+        cus.name,
+        cus.website,
+        cus.phone,
+        cus.address,
+        cus.description,
+        cus.contactSummary,
+        cus.nextContactTime,
+        cus.createTime,
+        cus.createBy,
+        cus.editTime,
+        cus.editBy
+
+
+        from tbl_customer cus
+        join tbl_user u
+        on cus.owner=u.id
+
+        where cus.id=#{id}
+
+
+    </select>
+
+    <select id="getCustomerName" resultType="String">
+
+        select name from tbl_customer where name like '%' #{name} '%'
+
+    </select>
+
+    <select id="getCustomerTotalId" resultType="int">
+
+        select count(*) from tbl_customer where name=#{customerName}
+
+    </select>
+
+    <select id="getCustomerId" resultType="String">
+
+        select id from tbl_customer where name=#{customerName}
+
+    </select>
+
+    <insert id="save">
+
+        insert into tbl_customer(
+
+            id,
+            owner,
+            name,
+            website,
+            phone,
+            createBy,
+            createTime,
+            contactSummary,
+            nextContactTime,
+            description,
+            address
+
+        )
+
+        values(
+
+            #{id},
+            #{owner},
+            #{name},
+            #{website},
+            #{phone},
+            #{createBy},
+            #{createTime},
+            #{contactSummary},
+            #{nextContactTime},
+            #{description},
+            #{address}
+
+        )
+
+
+
+
+
+    </insert>
+
+    <select id="getCustomerByName" resultType="Customer">
+
+        select * from tbl_customer where name=#{name}
+
+    </select>
+
+    <select id="getTotalByCondition" resultType="int">
+
+        select count(*)
+
+        from tbl_customer cus
+        join tbl_user u
+        on cus.owner=u.id
+
+        <where>
+
+            <if test="name!=null and name!=''">
+
+                cus.name like '%' #{name} '%'
+
+            </if>
+
+            <if test="owner!=null and owner!=''">
+
+                and u.name like '%' #{owner} '%'
+
+            </if>
+
+            <if test="phone!=null and phone!=''">
+
+                and cus.phone like '%' #{phone} '%'
+
+            </if>
+
+            <if test="website!=null and website!=''">
+
+                and cus.website like '%' #{website} '%'
+
+            </if>
+
+        </where>
+
+
+    </select>
+
+    <select id="getCustomerListByCondition" resultType="Customer">
+
+        select
+
+        cus.id,
+        cus.name,
+        u.name as owner,
+        cus.phone,
+        cus.website
+
+        from tbl_customer cus
+        join tbl_user u
+        on cus.owner=u.id
+
+        <where>
+
+            <if test="name!=null and name!=''">
+
+                cus.name like '%' #{name} '%'
+
+            </if>
+
+            <if test="owner!=null and owner!=''">
+
+                and u.name like '%' #{owner} '%'
+
+            </if>
+
+            <if test="phone!=null and phone!=''">
+
+                and cus.phone like '%' #{phone} '%'
+
+            </if>
+
+            <if test="website!=null and website!=''">
+
+                and cus.website like '%' #{website} '%'
+
+            </if>
+
+        </where>
+
+        order by cus.createTime desc
+
+        limit #{skipCount},#{pageSize}
+
+
+    </select>
+
+    <update id="update">
+
+        update tbl_customer set
+
+        owner=#{owner},
+        name=#{name},
+        phone=#{phone},
+        website=#{website},
+        address=#{address},
+        description=#{description},
+        contactSummary=#{contactSummary},
+        nextContactTime=#{nextContactTime},
+        editTime=#{editTime},
+        editBy=#{editBy}
+
+        where id=#{id}
+
+
+
+    </update>
+
+    <select id="getById" resultType="Customer">
+
+        select * from tbl_customer where id=#{id}
+
+
+    </select>
+
+    <delete id="deleteByIds">
+
+        delete from tbl_customer
+
+        where id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+
+            #{id}
+
+        </foreach>
+
+
+    </delete>
+
+
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

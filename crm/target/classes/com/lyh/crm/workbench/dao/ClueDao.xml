@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lyh.crm.workbench.dao.ClueDao">
+
+
+    <select id="getTotalByCondition" resultType="int">
+
+        select count(*)
+
+        from tbl_clue a
+        join tbl_user u
+        on a.owner=u.id
+
+        <where>
+
+            <if test="fullname!=null and fullname!=''">
+
+                a.fullname like '%' #{fullname} '%'
+
+            </if>
+
+            <if test="owner!=null and owner!=''">
+
+                and u.name like '%' #{owner} '%'
+
+            </if>
+
+
+            <if test="company!=null and company!=''">
+
+               and company like '%' #{company} '%'
+
+            </if>
+
+            <if test="phone!=null and phone!=''">
+
+               and phone like '%' #{phone} '%'
+
+            </if>
+
+            <if test="mphone!=null and mphone!=''">
+
+               and mphone like '%' #{mphone} '%'
+
+            </if>
+
+            <if test="source!=null and source!=''">
+
+               and source like '%' #{source} '%'
+
+            </if>
+
+            <if test="state!=null and state!=''">
+
+               and state like '%' #{state} '%'
+
+            </if>
+
+
+
+        </where>
+
+
+    </select>
+
+    <select id="getClueListByCondition" resultType="Clue">
+
+        select
+
+        a.id,
+        a.fullname,
+        u.name as owner,
+        a.appellation,
+        a.company,
+        a.phone,
+        a.mphone,
+        a.source,
+        a.state
+        from tbl_clue a
+        join tbl_user u
+        on a.owner=u.id
+
+        <where>
+
+            <if test="fullname!=null and fullname!=''">
+
+                a.fullname like '%' #{fullname} '%'
+
+            </if>
+
+            <if test="owner!=null and owner!=''">
+
+                and u.name like '%' #{owner} '%'
+
+            </if>
+
+
+            <if test="company!=null and company!=''">
+
+                and company like '%' #{company} '%'
+
+            </if>
+
+            <if test="phone!=null and phone!=''">
+
+                and phone like '%' #{phone} '%'
+
+            </if>
+
+            <if test="mphone!=null and mphone!=''">
+
+                and mphone like '%' #{mphone} '%'
+
+            </if>
+
+            <if test="source!=null and source!=''">
+
+                and source like '%' #{source} '%'
+
+            </if>
+
+            <if test="state!=null and state!=''">
+
+                and state like '%' #{state} '%'
+
+            </if>
+
+
+
+        </where>
+
+        order by a.createTime desc
+
+        limit #{skipCount},#{pageSize}
+
+
+    </select>
+
+    <delete id="delete">
+
+        delete from tbl_clue where id=#{id}
+
+    </delete>
+
+    <delete id="deleteByIds">
+
+        delete from tbl_clue
+
+        where id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+
+            #{id}
+
+        </foreach>
+
+
+    </delete>
+
+    <select id="getById" resultType="Clue">
+
+        select * from tbl_clue where id=#{id}
+
+    </select>
+
+    <select id="detail" resultType="Clue">
+
+        select
+
+        c.id,
+        c.fullname,
+        c.appellation,
+        u.name as owner,
+        c.company,
+        c.job,
+        c.email,
+        c.phone,
+        c.website,
+        c.mphone,
+        c.state,
+        c.source,
+        c.createBy,
+        c.createTime,
+        c.editBy,
+        c.editTime,
+        c.description,
+        c.contactSummary,
+        c.nextContactTime,
+        c.address
+
+
+        from tbl_clue c
+        join tbl_user u
+        on c.owner=u.id
+
+        where c.id=#{id}
+
+
+    </select>
+
+	<insert id="save">
+
+        insert into tbl_clue(
+
+            id,
+            fullname,
+            appellation,
+            owner,
+            company,
+            job,
+            email,
+            phone,
+            website,
+            mphone,
+            state,
+            source,
+            createBy,
+            createTime,
+            description,
+            contactSummary,
+            nextContactTime,
+            address
+
+
+        )
+
+        values(
+
+
+            #{id},
+            #{fullname},
+            #{appellation},
+            #{owner},
+            #{company},
+            #{job},
+            #{email},
+            #{phone},
+            #{website},
+            #{mphone},
+            #{state},
+            #{source},
+            #{createBy},
+            #{createTime},
+            #{description},
+            #{contactSummary},
+            #{nextContactTime},
+            #{address}
+
+        )
+
+
+
+
+    </insert>
+
+    <!--
+        owner='1',
+        company='1',
+        call='1',
+        fullname='1',
+        job='1',
+        email='1',
+        phone='1',
+        website='1',
+        mphone='1',
+        state='1',
+        source='1',
+        description='1',
+        contactSummary='1',
+        nextContactTime='1',
+        address='1',
+    -->
+    <update id="update">
+
+        update tbl_clue set
+
+        owner=#{owner},
+        fullname=#{fullname},
+
+        company=#{company},
+        appellation=#{appellation},
+        job=#{job},
+        email=#{email},
+        phone=#{phone},
+        website=#{website},
+        mphone=#{mphone},
+        state=#{state},
+        source=#{source},
+        description=#{description},
+        contactSummary=#{contactSummary},
+        nextContactTime=#{nextContactTime},
+        address=#{address}
+
+        where id=#{id}
+
+
+
+    </update>
+
+  	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
